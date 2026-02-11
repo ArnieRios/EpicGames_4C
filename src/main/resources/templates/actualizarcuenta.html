@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epic Games</title>
+
+<link rel="website icon" type="png" href="img/logosteam.png"> <%-- para que en la pestalla salga el logo o una imagen --%> 
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+	rel="stylesheet">
+<link th:href="@{/css/estilos.css}" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body>
+
+
+
+	<div class="layout ">
+
+		<div class="main-wrapper">
+
+
+<div class="container w-25 rounded text-bg-dark border border-secondary px-5 py-3 position-relative" style="margin-top: 200px;">
+
+    <!-- Botón para cerrar/regresar -->
+    <a href="principal.jsp" class="close-btn position-absolute top-0 end-0 d-flex justify-content-center align-items-center">
+    	        <i class="bi bi-x fs-1 p-2"></i>
+    </a>
+
+			<h1 class="text-center">Actualizar cuenta</h1>
+
+
+
+				<form class="row g-4" action="actualizaju" method="post">
+					<div class="mb-3">
+						<label for="exampleInputEmail1" class="form-label">Nombres</label> 
+						<input type="text" class="form-control"
+							name="nombre" value="${usuario.nombre}" aria-describedby="emailHelp">
+					</div>
+
+					<div class="mb-3">
+						<label for="exampleInputPassword1" class="form-label">Apellidos</label>
+						<input type="text" class="form-control"
+							name="apellido" value="${usuario.apellido}">
+					</div>
+					
+					<div class="mb-3">
+						<label for="exampleInputPassword1" class="form-label">Email</label>
+						<input type="email" class="form-control text-dark"
+							name="mail" value="${usuario.email}" disabled>
+					</div>
+					<%--Aquí sería un combo --%> 
+					
+					
+					
+					<div class="mb-3">
+						<label for="exampleInputPassword1" class="form-label">Clave</label>
+						<input type="password" class="form-control"
+							name="clave" value="${usuario.clave}">
+					</div>
+					
+					<div class="mb-3">
+						<label for="exampleInputPassword1" class="form-label">Fecha de nacimiento</label>
+						<input type="date" class="form-control text-dark"
+							name="fecreg" value="${usuario.fech_Reg}" disabled>
+					</div>
+					<%--Aquí sería un combo --%>
+																
+					<div class="mb-4 col-2">
+					<button type="submit" class="btn btn-primary">Actualizar</button>
+					</div>
+
+				</form>
+
+${mensaje}
+
+
+			</div>
+	</div>
+</div>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
