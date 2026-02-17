@@ -1,12 +1,14 @@
-package com.webjuegos.model;
+package com.epicgames.app.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
+@Table(name = "")
 public class CategoriaEstadoJuegoDTO {
 	private int idJuego;
 	private String titulo;
