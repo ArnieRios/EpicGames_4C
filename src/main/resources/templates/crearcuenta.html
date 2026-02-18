@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -38,7 +38,7 @@
 
 
 
-				<form class="row g-4" action="usuarioreg" method="post">
+				<form class="row g-4" action="/epicgames/crearcuenta" method="post">
 					<div class="mb-3">
 						<label for="exampleInputEmail1" class="form-label">Nombres</label> 
 						<input type="text" class="form-control"
@@ -76,7 +76,9 @@
 					<button type="submit" class="btn btn-primary">Registrarse</button>
 					</div>
 					
-					${mensaje}
+					<div th:text="${mensaje}" 
+															th:class="${cssmensaje}" role="alert">
+														</div>
 
 				</form>
 

@@ -10,7 +10,7 @@ public class PrincipalController {
 	
 	@GetMapping
 	public String abrirPrincipal() {
-		return "principal";
+		return "login";
 	}
 
 }

@@ -1,5 +1,9 @@
 package com.epicgames.app.model;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,10 +23,18 @@ public class UsuarioDTO {
 	@Column(unique = true) 
 	private String email;
 	@Column(name="id_tipo")
-	private int idtipo ;
+	private int idtipo = 2;
+	public LocalDate getFech_Reg() {
+		return fech_Reg;
+	}
+	public void setFech_Reg(LocalDate fech_Reg) {
+		this.fech_Reg = fech_Reg;
+	}
 	private String clave;
-	private String fech_Reg;
-	private int Id_Estado;
+	@Column(name="fech_Reg")
+	@DateTimeFormat(pattern= "yyyy-MM-dd")
+	private LocalDate fech_Reg;
+	private int Id_Estado = 1;
 	
 	//Setters and getters
 	
@@ -63,12 +75,7 @@ public class UsuarioDTO {
 	public void setClave(String clave) {
 		this.clave = clave;
 	}
-	public String getFech_Reg() {
-		return fech_Reg;
-	}
-	public void setFech_Reg(String fech_Reg) {
-		this.fech_Reg = fech_Reg;
-	}
+	
 	public int getId_Estado() {
 		return Id_Estado;
 	}
