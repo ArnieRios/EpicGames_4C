@@ -6,12 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Data;
 
 
-@Data
 @Entity
-@Table(name = "tb_Usuario")
+@Table(name = "tb_usuarios")
 public class UsuarioDTO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +18,20 @@ public class UsuarioDTO {
 	private String apellido;
 	@Column(unique = true) 
 	private String email;
-	private int id_tipo ;
+	@Column(name="id_tipo")
+	private int idtipo ;
 	private String clave;
 	private String fech_Reg;
 	private int Id_Estado;
 	
 	//Setters and getters
+	
+	public int getIdtipo() {
+		return idtipo;
+	}
+	public void setIdtipo(int idtipo) {
+		this.idtipo = idtipo;
+	}
 	public int getId_Usuario() {
 		return id_Usuario;
 	}
@@ -50,12 +56,7 @@ public class UsuarioDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public int getId_tipo() {
-		return id_tipo;
-	}
-	public void setId_tipo(int id_tipo) {
-		this.id_tipo = id_tipo;
-	}
+
 	public String getClave() {
 		return clave;
 	}

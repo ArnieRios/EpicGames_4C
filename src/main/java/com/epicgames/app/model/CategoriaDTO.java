@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "tb_Categorias")
+@Table(name = "tb_categorias")
 public class CategoriaDTO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
