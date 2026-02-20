@@ -7,7 +7,5 @@ import com.epicgames.app.model.JuegoDTO;
 
 
 @Repository
-public interface IJuegoRepository 
-				extends JpaRepository<JuegoDTO, Integer>{
-
-}
+public interface IJuegoRepository extends JpaRepository<JuegoDTO, Integer>{
+}	
