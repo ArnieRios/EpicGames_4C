@@ -1,81 +1,71 @@
 <header th:fragment="cabecera" class="bg-dark">
+    <div class="container-fluid d-flex align-items-center justify-content-between py-2">
 
-	<div class="container-fluid d-flex align-items-center justify-content-between py-2">
+        <div class="d-flex align-items-center"></div>
 
-		<div class="d-flex align-items-center">
-		</div>
+        <div class="d-flex justify-content-center flex-grow-1">
+            <a th:href="@{/epicgames/principal}">
+                <img th:src="@{/img/logosteam.png}"
+                     alt="Banner"
+                     height="60"
+                     style="object-fit: contain;">                     
+            </a>
+            <span class="fs-4 fw-bold text-white mt-2">EpicGames</span>
+        </div>
 
-		<div class="d-flex justify-content-center flex-grow-1">
-			<a href="principal.jsp">
-				<img  th:src="@{/img/logosteam.png}"
-					 alt="Banner"
-					 height="60"
-					 style="object-fit: contain;">					 
-			</a>
-			<span class="fs-4 fw-bold text-white mt-2">
-		EpicGames
-	</span>
-		</div>
+        <div class="d-flex align-items-center">
+            <a th:href="@{/epicgames/canasta}"
+               class="btn btn-link text-white position-relative p-0 me-3">
+                <i class="bi bi-cart fs-5"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                      th:text="${cantArticulos}">
+                    0
+                </span>
+            </a>
 
-		<div class="d-flex align-items-center">
+            <div class="dropdown" th:if="${session.u != null}">
+                <a href="#" class="d-flex align-items-center" id="dropdownUser"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <img th:src="@{|/img/perfil/${session.u.idtipo}.jpg|}"
+                         th:onerror="this.src='/img/perfil/default-user.png'"
+                         alt="Usuario"
+                         class="rounded-circle"
+                         width="36" height="36"
+                         style="object-fit: cover;">
+                </a>
 
-			<a href="canasta.jsp"
-			   class="btn btn-link text-white position-relative p-0 me-3">
-				<i class="bi bi-cart fs-5"></i>
-				<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-					[[${cantArticulos}]]
-				</span>
-			</a>
+                <ul class="dropdown-menu dropdown-menu-end shadow"
+                    aria-labelledby="dropdownUser" style="width: 250px;">
 
-			<div class="dropdown">
-				<a href="#" class="d-flex align-items-center" id="dropdownUser"
-				   data-bs-toggle="dropdown" aria-expanded="false">
-					<img th:src="@{img/perfil}+${u.id_tipo}+@{.jpg}"
-						 onerror="src='img/perfil/default-user.png'"
-						 alt="Usuario"
-						 class="rounded-circle"
-						 width="36" height="36"
-						 style="object-fit: cover;">
-				</a>
+                    <li class="text-center p-3">
+                        <img th:src="@{'/img/perfil/' + ${session.u.idtipo} + '.jpg'}"
+                             class="rounded-circle mb-2"
+                             width="60" height="60"
+                             style="object-fit: cover;"
+                             th:onerror="this.src='/img/perfil/default-user.png'">
+                        <div class="fw-semibold" th:text="${session.u.nombre + ' ' + session.u.apellido}">
+                            Nombre Usuario
+                        </div>
+                    </li>
 
-				<ul class="dropdown-menu dropdown-menu-end shadow"
-					aria-labelledby="dropdownUser" style="width: 250px;">
+                    <li><hr class="dropdown-divider"></li>
 
-					<li class="text-center p-3">
-						<img th:src="@{img/perfil/}+${u.id_tipo}+-@{.jpg}"
-							 class="rounded-circle mb-2"
-							 width="60" height="60"
-							 style="object-fit: cover;"
-							 onerror="src='img/perfil/default-user.png'">
-						<div class="fw-semibold">
-							${u.nombre} ${u.apellido}
-						</div>
-					</li>
+                    <li>
+                        <a class="dropdown-item" th:href="@{/epicgames/actualizarperfil}">
+                            <i class="fa-regular fa-user me-2"></i> Actualizar datos
+                        </a>
+                    </li>
 
-					<li><hr class="dropdown-divider"></li>
+                    <li><hr class="dropdown-divider"></li>
 
-					<c:if test="${u != null}">
-						<li>
-							<a class="dropdown-item" href="actualizaju">
-								<i class="fa-regular fa-user me-2"></i> Actualizar datos
-							</a>
-						</li>
-					</c:if>
-
-				
-
-					<li><hr class="dropdown-divider"></li>
-
-					<li>
-						<a class="dropdown-item text-danger"
-						   href="<c:url value='/logout' />">
-							<i class="fa-solid fa-arrow-right-from-bracket me-2"></i>
-							Cerrar sesión
-						</a>
-					</li>
-				</ul>
-			</div>
-
-		</div>
-	</div>
+                    <li>
+                        <a class="dropdown-item text-danger" th:href="@{/}">
+                            <i class="fa-solid fa-arrow-right-from-bracket me-2"></i>
+                            Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </header>
