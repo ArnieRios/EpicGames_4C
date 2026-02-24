@@ -1,0 +1,244 @@
+DROP DATABASE IF EXISTS tienda_juegos;
+
+create database tienda_juegos;
+
+use tienda_juegos;
+
+CREATE TABLE tb_Categorias (
+  Id_Categoria  INT AUTO_INCREMENT PRIMARY KEY,
+  Nom_Categoria VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE tb_Estado (
+  Id_Estado  INT AUTO_INCREMENT PRIMARY KEY,
+  nom_estado VARCHAR(50) NOT NULL
+);
+
+
+create table tb_Tipos(
+id_tipo int not null primary key,
+nom_tipos varchar(15)
+);
+
+CREATE TABLE tb_Usuarios (
+  id_Usuario INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(50)  NOT NULL,
+  apellido VARCHAR(50)  NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  id_tipo int DEFAULT 2,
+  clave CHAR(8) NOT NULL,
+  fech_Reg date  null,
+  Id_Estado  int DEFAULT 1, -- 1 activo, 2 eliminado,3 suspendido
+  foreign key (id_tipo) references tb_Tipos(id_tipo),
+  foreign key (Id_Estado) references tb_Estado(Id_Estado)
+) ;
+
+
+
+CREATE TABLE tb_Juegos (
+  id_Juego INT AUTO_INCREMENT PRIMARY KEY,
+  Titulo VARCHAR(150) NOT NULL,
+  descripcion VARCHAR(500) NOT NULL,
+  precio DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+  fech_Reg DATE NOT NULL DEFAULT (CURRENT_DATE),
+  Id_Categoria INT NOT NULL,
+  Id_Estado INT NOT NULL default 1, -- 1 activo, 2 eliminado,3 suspendido
+  FOREIGN KEY (Id_Categoria) REFERENCES tb_Categorias(Id_Categoria),
+  FOREIGN KEY (Id_Estado)    REFERENCES tb_Estado(Id_Estado)
+);
+
+CREATE TABLE tb_Carrito (
+  id_Carrito INT AUTO_INCREMENT PRIMARY KEY,
+  id_Usuario INT NOT NULL,
+  Id_Estado  int DEFAULT 1, -- 1 activo, 4 abandonado, 5 comprado
+  fch_Creado date  null,
+  FOREIGN KEY (id_Usuario) REFERENCES tb_Usuarios(id_Usuario),
+  FOREIGN KEY (Id_Estado) REFERENCES tb_Estado(Id_Estado)
+);
+
+CREATE TABLE tb_Carrito_Item (
+  id_Carrito INT NOT NULL,
+  id_Juego INT NOT NULL,
+  Cantidad INT NOT NULL DEFAULT 1,
+  precio_Uni DECIMAL(10,2) NOT NULL,
+  PRIMARY KEY (id_Carrito, id_Juego),
+  FOREIGN KEY (id_Carrito) REFERENCES tb_Carrito(id_Carrito),
+  FOREIGN KEY (id_Juego)   REFERENCES tb_Juegos(id_Juego)
+);
+
+CREATE TABLE tb_Biblioteca_Usuario (
+  id_Usuario  INT NOT NULL,
+  id_Juego    INT NOT NULL,
+  Id_Estado   INT NOT NULL DEFAULT 5,  -- 5 comprado (ya en biblioteca)
+  fch_Adquirido DATE NOT NULL DEFAULT (CURRENT_DATE),
+  PRIMARY KEY (id_Usuario, id_Juego),
+  FOREIGN KEY (id_Usuario) REFERENCES tb_Usuarios(id_Usuario),
+  FOREIGN KEY (id_Juego)   REFERENCES tb_Juegos(id_Juego),
+  FOREIGN KEY (Id_Estado)  REFERENCES tb_Estado(Id_Estado)
+);
+
+
+--------------------------------------------------
+-- INSERT IMPORTANTES NO BORRAR NI MODIFICAR
+--------------------------------------------------
+
+insert into tb_Estado values (1, 'activo');
+insert into tb_Estado values (2, 'eliminado');
+insert into tb_Estado values (3, 'suspendido');
+insert into tb_Estado values (4, 'abandonado');
+insert into tb_Estado values (5, 'comprado');
+
+insert into tb_tipos values (1, 'administrativo');
+insert into tb_tipos values (2, 'cliente');
+
+-- INSERT de datos 
+
+--------------------------------------------------
+-- 1) tb_Categorias
+--------------------------------------------------
+INSERT INTO tb_Categorias VALUES (1,'Acción');
+INSERT INTO tb_Categorias  VALUES (2,'Aventura');
+INSERT INTO tb_Categorias  VALUES (3,'RPG');
+INSERT INTO tb_Categorias  VALUES (4,'Deportes');
+INSERT INTO tb_Categorias  VALUES (5,'Carreras');
+INSERT INTO tb_Categorias  VALUES (6,'Estrategia');
+INSERT INTO tb_Categorias  VALUES (7,'Simulación');
+INSERT INTO tb_Categorias  VALUES (8,'Indie');
+INSERT INTO tb_Categorias  VALUES (9,'Terror');
+INSERT INTO tb_Categorias  VALUES (10,'Casual');
+
+--------------------------------------------------
+-- 2) tb_Usuarios
+--------------------------------------------------
+INSERT INTO tb_Usuarios VALUES (null, 'Ana', 'Lopez','ana.lopez@mail.com', 2, 'clave123', '2025-01-05', 1);
+INSERT INTO tb_Usuarios VALUES (null, 'Bruno',  'Ramos', 'bruno.ramos@mail.com', 2, 'clave234', '2025-01-06', 1);
+INSERT INTO tb_Usuarios VALUES (null, 'Carla',  'Vega', 'carla.vega@mail.com', 2, 'clave345', '2025-01-07', 1);
+INSERT INTO tb_Usuarios VALUES (null, 'Diego',  'Cruz', 'diego.cruz@mail.com', 2, 'clave456', '2025-01-08', 1);
+INSERT INTO tb_Usuarios VALUES (null, 'Elena',  'Torres', 'elena.torres@mail.com', 2, 'clave567', '2025-01-09', 1);
+INSERT INTO tb_Usuarios VALUES (null, 'Fabio',  'Mendez', 'fabio.mendez@mail.com', 2, 'clave678', '2025-01-10', 1);
+INSERT INTO tb_Usuarios VALUES (null, 'Gabriela','Soto', 'gabriela.soto@mail.com',2, 'clave789', '2025-01-11', 1);
+INSERT INTO tb_Usuarios VALUES (null, 'Hugo', 'Paredes', 'hugo.paredes@mail.com', 2, 'clave890', '2025-01-12', 1);
+INSERT INTO tb_Usuarios VALUES (null, 'Ivonne', 'Rios',    'ivonne.rios@mail.com',  2, 'clave901', '2025-01-13', 1);
+INSERT INTO tb_Usuarios VALUES (null,'Juan',   'Perez',   'juan.perez@mail.com',   1, 'clave012', '2025-01-14', 1);
+
+--------------------------------------------------
+-- 3) tb_Juegos
+--------------------------------------------------
+INSERT INTO tb_Juegos VALUES (null, 'Half life 3', 'Shooter en primera persona', 199.90, '2025-01-01', 1, 1);
+INSERT INTO tb_Juegos VALUES (null, 'GTA 6', 'Mundo abierto', 199.90, '2025-01-02', 1, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Resident Evil Requiem', 'Terror y supervivencia', 149.90, '2025-01-03', 9, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Minecraft', 'Creativo', 49.90, '2025-01-04', 2, 1);
+INSERT INTO tb_Juegos VALUES (null, 'The Last of Us Part I', 'Acción', 49.90, '2025-01-05', 2, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Silent Hills (P.T.)', 'Terror psicológico', 149.90, '2025-01-06', 9, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Bully 2', 'Aventura • Escolar', 100.90, '2025-01-07', 7, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Resident Evil 4 Remake', 'Terror', 49.90,  '2025-01-08', 9, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Phasmophobia', 'Terror cooperativo', 49.90, '2025-01-09', 9, 1);
+INSERT INTO tb_Juegos VALUES (null,'Red Dead Redemption 2','Sandbox en el viejo oeste', 79.90, '2025-01-10', 1,1);
+
+INSERT INTO tb_Juegos VALUES (null,'DOOM Eternal', 'Acción frenética contra demonios en primera persona.', 79.90, '2025-01-11', 1, 3);
+INSERT INTO tb_Juegos VALUES (null, 'Uncharted 4: A Thief''s End', 'Aventura cinematográfica de exploración y acción.', 89.90, '2025-01-12', 2, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Tomb Raider (2013)', 'Aventura de supervivencia y exploración.', 49.90, '2025-01-13', 2, 1);
+INSERT INTO tb_Juegos VALUES (null, 'The Witcher 3: Wild Hunt', 'RPG de mundo abierto con decisiones y misiones épicas.', 79.90, '2025-01-14', 3, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Persona 5 Royal', 'RPG por turnos con historia y gestión de vida escolar.', 129.90, '2025-01-15', 3, 1);
+INSERT INTO tb_Juegos VALUES (null, 'The Elder Scrolls V: Skyrim', 'RPG de fantasía con exploración y progreso libre.', 69.90, '2025-01-16', 3, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Final Fantasy VII Remake', 'RPG de acción con historia reimaginada y combates dinámicos.', 149.90, '2025-01-17', 3, 1);
+INSERT INTO tb_Juegos VALUES (null, 'EA SPORTS FC 25', 'Fútbol competitivo con modos online y carrera.', 199.90, '2025-01-18', 4, 1);
+INSERT INTO tb_Juegos VALUES (null, 'NBA 2K25', 'Simulador de básquet con modos de equipo y online.', 199.90, '2025-01-19', 4, 1);
+INSERT INTO tb_Juegos VALUES (null, 'UFC 5', 'Combate deportivo con peleas y progresión de personaje.', 189.90, '2025-01-20', 4, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Tony Hawk''s Pro Skater 1+2', 'Skate arcade con trucos, retos y multijugador.', 79.90, '2025-01-21', 4, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Forza Horizon 5', 'Carreras en mundo abierto con eventos y colección de autos.', 179.90, '2025-01-22', 5, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Gran Turismo 7', 'Simulación de conducción con campeonatos y tuning.', 199.90, '2025-01-23', 5, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Need for Speed Heat', 'Carreras urbanas con persecuciones y personalización.', 89.90, '2025-01-24', 5, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Mario Kart 8 Deluxe', 'Carreras arcade con ítems y multijugador local/online.', 179.90, '2025-01-25', 5, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Age of Empires IV', 'Estrategia en tiempo real con civilizaciones y campañas.', 129.90, '2025-01-26', 6, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Sid Meier''s Civilization VI', 'Estrategia por turnos de imperios y diplomacia.', 99.90, '2025-01-27', 6, 1);
+INSERT INTO tb_Juegos VALUES (null, 'XCOM 2', 'Estrategia táctica por turnos contra invasión alienígena.', 79.90, '2025-01-28', 6, 1);
+INSERT INTO tb_Juegos VALUES (null, 'StarCraft II', 'RTS competitivo con campañas y multijugador.', 0.00, '2025-01-29', 6, 1);
+INSERT INTO tb_Juegos VALUES (null, 'The Sims 4', 'Simulación de vida con construcción y gestión de personajes.', 0.00, '2025-01-30', 7, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Euro Truck Simulator 2', 'Simulación de conducción de camiones y rutas.', 59.90, '2025-01-31', 7, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Cities: Skylines', 'Simulación de ciudad: tráfico, servicios y crecimiento urbano.', 79.90, '2025-02-01', 7, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Hades', 'Roguelike de acción con narrativa y progresión.', 59.90, '2025-02-02', 8, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Celeste', 'Plataformas desafiante con historia emotiva.', 39.90, '2025-02-03', 8, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Dead Cells', 'Acción roguelite con combates rápidos y exploración.', 49.90, '2025-02-04', 8, 1);
+INSERT INTO tb_Juegos VALUES (null,'Cuphead', 'Acción estilo cartoon con jefes y alta dificultad.', 49.90, '2025-02-05', 8, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Among Us', 'Juego social de deducción y trabajo en equipo.', 19.90, '2025-02-06', 10, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Fall Guys', 'Plataformas multijugador con minijuegos y eliminación.', 0.00, '2025-02-07', 10, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Overcooked! 2', 'Cocina cooperativa caótica por niveles.', 49.90, '2025-02-08', 10, 1);
+INSERT INTO tb_Juegos VALUES (null, 'Portal 2', 'Puzles con portales y modo cooperativo.', 39.90, '2025-02-09', 10, 1);
+--------------------------------------------------
+-- 4) tb_Carrito
+--------------------------------------------------
+INSERT INTO tb_Carrito VALUES (1, 1, 1, '2025-02-01');
+INSERT INTO tb_Carrito VALUES (2, 2, 1, '2025-02-02');
+INSERT INTO tb_Carrito VALUES (3, 3, 1, '2025-02-03');
+INSERT INTO tb_Carrito VALUES (4, 4, 1, '2025-02-04');
+
+--------------------------------------------------
+-- 5) tb_Carrito_Item
+--------------------------------------------------
+INSERT INTO tb_Carrito_Item VALUES (1, 1, 1, 199.90);
+INSERT INTO tb_Carrito_Item VALUES (1, 8, 1,  49.90);
+INSERT INTO tb_Carrito_Item VALUES (2, 3, 1, 149.90);
+INSERT INTO tb_Carrito_Item VALUES (3, 4, 1, 49.90);
+INSERT INTO tb_Carrito_Item VALUES (3, 5, 2, 49.90);
+INSERT INTO tb_Carrito_Item VALUES (4, 10, 1, 79.90);
+
+--------------------------------------------------
+-- 8) tb_Biblioteca_Usuario
+--------------------------------------------------
+INSERT INTO tb_Biblioteca_Usuario (id_Usuario, id_Juego, Id_Estado, fch_Adquirido)
+VALUES (2, 9, 5, '2025-03-06');
+
+
+--------------------------------------------------
+-- SELECT de verificación
+--------------------------------------------------
+SELECT * FROM tb_Tipos;
+SELECT * FROM tb_Estado;
+SELECT * FROM tb_Categorias;
+SELECT * FROM tb_Usuarios;
+SELECT * FROM tb_Juegos;
+SELECT * FROM tb_Carrito;
+SELECT * FROM tb_Carrito_Item;
+SELECT * FROM tb_Biblioteca_Usuario;
+
+
+
+CREATE PROCEDURE sp_listar_juegos()
+  SELECT 
+  j.id_Juego as idJuego,
+  j.Titulo as titulo, 
+  j.descripcion, 
+  j.precio, 
+  j.fech_Reg as fechReg, 
+  c.Nom_Categoria AS Categoria, 
+  e.nom_estado AS Estado
+  FROM tb_Juegos j
+  INNER JOIN tb_Categorias c ON c.Id_Categoria = j.Id_Categoria
+  INNER JOIN tb_Estado e     ON e.Id_Estado    = j.Id_Estado
+  ORDER BY j.id_Juego DESC;
+
+CALL sp_listar_juegos();
+
+
+
+-- añadido para carrito de compra --
+
+create table tb_cab_boleta(
+num_bol      char(5) not null,
+fch_bol    date,
+id_Usuario  int not null,
+primary key (num_bol),
+foreign key (id_Usuario) references tb_usuarios(id_Usuario)
+);
+
+create table tb_det_boleta(
+num_bol     char(5) not null,
+id_juego      int not null,
+cantidad    int,
+preciovta   decimal(8,2),
+primary key (num_bol,id_juego),
+foreign key (num_bol) references tb_cab_boleta(num_bol),
+foreign key (id_juego) references tb_juegos(id_juego)
+);
+
