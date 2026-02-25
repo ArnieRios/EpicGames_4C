@@ -1,6 +1,5 @@
 package com.epicgames.app.controller;
 
-import java.time.LocalDate;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.epicgames.app.model.CategoriaDTO;
-import com.epicgames.app.model.JuegoDTO;
 import com.epicgames.app.repository.ICategoriaRepository;
 import com.epicgames.app.repository.IEstadoRepository;
-import com.epicgames.app.repository.IJuegoRepository;
 
 @Controller
 @RequestMapping("/epicgames")
@@ -28,6 +25,9 @@ public class CategoriaController {
 
 	@Autowired
 	private ICategoriaRepository repoCategoria;
+	
+	@Autowired
+	private IEstadoRepository repoEstado;
 
 
 	@GetMapping("/categorias")
@@ -36,65 +36,79 @@ public class CategoriaController {
 	  
 
 	    model.addAttribute("lstCategorias", listado);
+	    model.addAttribute("lstEstados", repoEstado.findAll());
 
-	    model.addAttribute("nuevoJuego", new CategoriaDTO());
+	    model.addAttribute("nuevaCategoria", new CategoriaDTO());
 
 	    return "mantenimientocategorias";
 	}
 
 	@PostMapping("/categorias/registrar")
 	public String registrar(@ModelAttribute("nuevaCategoria") CategoriaDTO categoria, RedirectAttributes ra) {
+		
+		categoria.setIdEstado(1);
 	
 
 		repoCategoria.save(categoria);
 		ra.addFlashAttribute("mensaje", "Categoria registrada correctamente");
 		ra.addFlashAttribute("cssmensaje", "alert alert-success");
-		return "redirect:/epicgames/mantenimientocategorias";
+		return "redirect:/epicgames/categorias";
 	}
 	
 	
-	/*
+	@GetMapping("/categorias/editar/{id}")
+	public String editar(@PathVariable("id") int id_categoria, Model model, RedirectAttributes ra) {
+		Optional<CategoriaDTO> opt = repoCategoria.findById(id_categoria);
+		if (opt.isEmpty()) {
+			ra.addFlashAttribute("mensaje", "No se encontró la categoria con ID: " + id_categoria);
+			ra.addFlashAttribute("cssmensaje", "alert alert-danger");
+			return "redirect:/epicgames/categorias";
+		}
 
-
+		model.addAttribute("categoria", opt.get());
+		model.addAttribute("lstCategorias", repoCategoria.findAll());
+		model.addAttribute("lstEstados", repoEstado.findAll());
+		return "actualizarcategoria";
+	}
 
 	@PostMapping("/categorias/actualizar")
-	public String actualizar(@ModelAttribute("categoria") CategoriaDTO categoriaEditada, RedirectAttributes ra) {
-		Optional<JuegoDTO> opt = repoCategoria.findById(juegoEditado.getIdJuego());
+	public String actualizar(@ModelAttribute("categoria") CategoriaDTO CategoriaEditada, RedirectAttributes ra) {
+		Optional<CategoriaDTO> opt = repoCategoria.findById(CategoriaEditada.getId_categoria());
 		if (opt.isEmpty()) {
-			ra.addFlashAttribute("mensaje", "No se pudo actualizar: juego no encontrado");
+			ra.addFlashAttribute("mensaje", "No se pudo actualizar: categoría no encontrada");
 			ra.addFlashAttribute("cssmensaje", "alert alert-danger");
-			return "redirect:/epicgames/juegos";
+			return "redirect:/epicgames/categorias";
 		}
 
 		CategoriaDTO existente = opt.get();
-		existente.setTitulo(juegoEditado.getTitulo());
-		existente.setDescripcion(juegoEditado.getDescripcion());
-		existente.setPrecio(juegoEditado.getPrecio());
-		existente.setIdCategoria(juegoEditado.getIdCategoria());
-		existente.setIdEstado(juegoEditado.getIdEstado());
+		existente.setNom_categoria(CategoriaEditada.getNom_categoria());
+		existente.setDescripcion(CategoriaEditada.getDescripcion());
+		existente.setIdEstado(CategoriaEditada.getIdEstado());
 
-		repoJuego.save(existente);
-		ra.addFlashAttribute("mensaje", "Juego actualizado correctamente");
+	
+
+		repoCategoria.save(existente);
+		ra.addFlashAttribute("mensaje", "Categoria actualizada correctamente");
 		ra.addFlashAttribute("cssmensaje", "alert alert-success");
-		return "redirect:/epicgames/juegos";
+		return "redirect:/epicgames/categorias";
 	}
 
 	@PostMapping("/categorias/eliminar/{id}")
-	public String eliminarLogico(@PathVariable("id") int idJuego, RedirectAttributes ra) {
-		Optional<JuegoDTO> opt = repoJuego.findById(idJuego);
+	public String eliminarLogico(@PathVariable("id") int id_categoria, RedirectAttributes ra) {
+		Optional<CategoriaDTO> opt = repoCategoria.findById(id_categoria);
 		if (opt.isPresent()) {
-			JuegoDTO juego = opt.get();
-			juego.setIdEstado(2); // 2 = eliminado
-			repoJuego.save(juego);
-			ra.addFlashAttribute("mensaje", "Juego eliminado (lógico) correctamente");
+			CategoriaDTO categoria = opt.get();
+			categoria.setIdEstado(2); // 2 = eliminado
+			repoCategoria.save(categoria);
+			ra.addFlashAttribute("mensaje", "setId_estado eliminada (lógica) correctamente");
 			ra.addFlashAttribute("cssmensaje", "alert alert-warning");
 		} else {
-			ra.addFlashAttribute("mensaje", "No se encontró el juego para eliminar");
+			ra.addFlashAttribute("mensaje", "No se encontró la categoria para eliminar");
 			ra.addFlashAttribute("cssmensaje", "alert alert-danger");
 		}
 
-		return "redirect:/epicgames/juegos";
+		return "redirect:/epicgames/categorias";
 	}
 	
-	*/
+	
 }

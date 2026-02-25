@@ -4,16 +4,18 @@ create database tienda_juegos;
 
 use tienda_juegos;
 
-CREATE TABLE tb_Categorias (
-  Id_Categoria  INT AUTO_INCREMENT PRIMARY KEY,
-  Nom_Categoria VARCHAR(100) NOT NULL
-);
-
 CREATE TABLE tb_Estado (
   Id_Estado  INT AUTO_INCREMENT PRIMARY KEY,
   nom_estado VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE tb_Categorias (
+  Id_Categoria  INT AUTO_INCREMENT PRIMARY KEY,
+  Nom_Categoria VARCHAR(100) NOT NULL,
+  descripcion varchar(100),
+  Id_Estado  int DEFAULT 1, -- 1 activo, 2 eliminado,3 suspendido
+  foreign key (Id_Estado) references tb_Estado(Id_Estado)
+);
 
 create table tb_Tipos(
 id_tipo int not null primary key,
@@ -96,16 +98,17 @@ insert into tb_tipos values (2, 'cliente');
 --------------------------------------------------
 -- 1) tb_Categorias
 --------------------------------------------------
-INSERT INTO tb_Categorias VALUES (1,'Acción');
-INSERT INTO tb_Categorias  VALUES (2,'Aventura');
-INSERT INTO tb_Categorias  VALUES (3,'RPG');
-INSERT INTO tb_Categorias  VALUES (4,'Deportes');
-INSERT INTO tb_Categorias  VALUES (5,'Carreras');
-INSERT INTO tb_Categorias  VALUES (6,'Estrategia');
-INSERT INTO tb_Categorias  VALUES (7,'Simulación');
-INSERT INTO tb_Categorias  VALUES (8,'Indie');
-INSERT INTO tb_Categorias  VALUES (9,'Terror');
-INSERT INTO tb_Categorias  VALUES (10,'Casual');
+INSERT INTO tb_Categorias VALUES (1,'Acción', "Combate, disparos y adrenalina constante.", 1);
+INSERT INTO tb_Categorias  VALUES (2,'Aventura',"Historias épicas y exploración.",1);
+INSERT INTO tb_Categorias  VALUES (3,'RPG',"Personajes, niveles y mundos profundos.",1);
+INSERT INTO tb_Categorias  VALUES (4,'Deportes',"Fútbol, carreras y competencia.",1);
+INSERT INTO tb_Categorias  VALUES (5,'Carreras',"Máxima velocidad.",1);
+INSERT INTO tb_Categorias  VALUES (6,'Estrategia',"Planificación y decisiones tácticas.",1);
+INSERT INTO tb_Categorias  VALUES (7,'Simulación',"Experiencias realistas y creativas.",1);
+INSERT INTO tb_Categorias  VALUES (8,'Indie',"Juegos de autor.",1);
+INSERT INTO tb_Categorias  VALUES (9,'Terror',"Suspenso y horror psicológico.",1);
+INSERT INTO tb_Categorias  VALUES (10,'Casual',"Diversión rápida para todos.",1);
+INSERT INTO tb_Categorias  VALUES (11,'Multijugador',"Juega y compite con otros.",1);
 
 --------------------------------------------------
 -- 2) tb_Usuarios
