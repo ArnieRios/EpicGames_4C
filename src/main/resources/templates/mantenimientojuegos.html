@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
@@ -58,6 +59,7 @@
 									<th scope="col">Descripción</th>
 									<th scope="col">Precio</th>
 									<th scope="col">Fecha de registro</th>
+									<th scope="col">Proveedor</th>
 									<th scope="col">Categoría</th>
 									<th scope="col">Estado</th>
 									<th class="text-center" scope="col">Acciones</th>
@@ -76,6 +78,7 @@
 									<td th:text="${j.descripcion}">Descripción</td>
 									<td th:text="${j.precio != null ? 'S/ ' + #numbers.formatDecimal(j.precio, 1, 2) : 'S/ 0.00'}">S/ 0.00</td>
 									<td class="text-center" th:text="${j.fechReg}">2025-01-01</td>
+								<td th:text="${j.objProvedor != null ? j.objProvedor.nom_prov : ''}"></td>
 								<td th:text='${j.objCategoria.nom_categoria}'></td>
 								<td th:text='${j.objEstado.nom_estado}'>activo</td>
 
@@ -131,6 +134,17 @@
 							</div>
 
 							<div class="col-md-6">
+										<label class="form-label">Proveedor</label>
+										<select class="form-select" th:field="*{idProvedor}" required>
+											<option value="" selected disabled>Seleccione...</option>
+											<option th:each="p : ${lstProvedores}"
+													th:value="${p.id_provedor}"
+													th:text="${p.nom_prov}">
+											</option>
+										</select>
+									</div>
+
+									<div class="col-md-6">
 								<label class="form-label">Categoría</label>
 								<select class="form-select" th:field="*{idCategoria}" required>
 								    <option value="" selected disabled>Seleccione...</option>
@@ -139,6 +153,7 @@
 								            th:text="${c.nom_categoria}">
 								    </option>
 								  </select>
+									</div>
 
 							<div class="col-md-12 d-flex justify-content-start gap-3">
 								<button type="submit" class="btn btn-primary">Guardar</button>

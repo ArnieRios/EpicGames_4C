@@ -19,6 +19,7 @@ import com.epicgames.app.model.JuegoDTO;
 import com.epicgames.app.repository.ICategoriaRepository;
 import com.epicgames.app.repository.IEstadoRepository;
 import com.epicgames.app.repository.IJuegoRepository;
+import com.epicgames.app.repository.IProvedorRepository;
 
 @Controller
 @RequestMapping("/epicgames")
@@ -30,6 +31,8 @@ public class JuegoController {
 	private ICategoriaRepository repoCategoria;
 	@Autowired
 	private IEstadoRepository repoEstado;
+	@Autowired
+	private IProvedorRepository repoProvedor;
 
 	@GetMapping("/juegos")
 	public String listar(Model model) {
@@ -37,6 +40,7 @@ public class JuegoController {
 	  
 
 	    model.addAttribute("lstJuegos", listado);
+	    model.addAttribute("lstProvedores", repoProvedor.findAll());
 	    model.addAttribute("lstCategorias", repoCategoria.findAll());
 	    model.addAttribute("lstEstados", repoEstado.findAll());
 
@@ -68,6 +72,7 @@ public class JuegoController {
 		}
 
 		model.addAttribute("juego", opt.get());
+		model.addAttribute("lstProvedores", repoProvedor.findAll());
 		model.addAttribute("lstCategorias", repoCategoria.findAll());
 		model.addAttribute("lstEstados", repoEstado.findAll());
 		return "actualizarjuegos";
@@ -86,6 +91,7 @@ public class JuegoController {
 		existente.setTitulo(juegoEditado.getTitulo());
 		existente.setDescripcion(juegoEditado.getDescripcion());
 		existente.setPrecio(juegoEditado.getPrecio());
+		existente.setIdProvedor(juegoEditado.getIdProvedor());
 		existente.setIdCategoria(juegoEditado.getIdCategoria());
 		existente.setIdEstado(juegoEditado.getIdEstado());
 

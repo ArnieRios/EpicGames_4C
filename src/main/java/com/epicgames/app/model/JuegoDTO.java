@@ -23,11 +23,16 @@ public class JuegoDTO {
 	private String descripcion;
 	private Double precio;
 	private String fechReg;
+	@Column(name = "id_provedor")
+	private Integer idProvedor;
 	@Column(name = "id_categoria")
 	  private Integer idCategoria;
 	@Column(name = "id_estado")
 	  private Integer idEstado;
 	
+	@ManyToOne
+	@JoinColumn(name = "id_provedor", insertable = false, updatable = false)
+	private ProvedorDTO objProvedor;
 	@ManyToOne
 	@JoinColumn(name = "id_categoria", insertable = false, updatable = false)
 	private CategoriaDTO objCategoria;
